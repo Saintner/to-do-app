@@ -8,35 +8,57 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 export default class CreateTodoDialog extends React.Component {
-    state = {
-        open: false,
+
+    getTodoInfo = (key) =>{
+        return this.props.selectedTodo[key];
     };
 
-    handleClickOpen = () => {
-        this.setState({ open: true });
+    state = {
+        title: "",
+        description:"",
+        index:""
+    };
+
+    createTodo = () => {
+        if(this.props.selectedTodo.title !== "" && this.props.selectedTodo.description !== ""){
+            this.props.submit(this.props.sendButtonTitle)
+        }
     };
 
     handleClose = () => {
-        this.setState({ open: false });
+        this.props.close();
     };
 
     render() {
         return (
             <div>
                 <Dialog
-                    open={this.state.open}
+                    open={this.props.open}
                     onClose={this.handleClose}
                     aria-labelledby="form-dialog-title"
                 >
-                    <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+                    <DialogTitle id="form-dialog-title">{this.props.sendButtonTitle} Todo</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
                         </DialogContentText>
                         <TextField
                             autoFocus
+                            value={this.props.selectedTodo.title}
+                            onChange={event => this.props.onChange("title",event.target.value)}
                             margin="dense"
                             id="name"
                             label="Title"
+                            type="text"
+                            fullWidth
+                        />
+                        <TextField
+                            autoFocus
+                            value={this.props.selectedTodo.description}
+                            onChange={event => this.props.onChange("description",event.target.value)}
+                            multiline={true}
+                            margin="dense"
+                            id="name"
+                            label="Description"
                             type="text"
                             fullWidth
                         />
@@ -45,8 +67,8 @@ export default class CreateTodoDialog extends React.Component {
                         <Button onClick={this.handleClose} color="primary">
                             Cancel
                         </Button>
-                        <Button onClick={this.handleClose} color="primary">
-                            Create
+                        <Button onClick={() => this.createTodo()} color="primary">
+                            {this.props.sendButtonTitle}
                         </Button>
                     </DialogActions>
                 </Dialog>
